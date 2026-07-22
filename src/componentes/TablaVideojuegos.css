@@ -1,0 +1,79 @@
+.tabla-container {
+  width: 100%;
+  overflow-x: auto;
+  padding: 10px;
+  border-radius: 12px;
+}
+
+.tabla-videojuegos {
+  width: 100%;
+  border-collapse: collapse;
+  background: #121212;
+  color: #ffffff;
+  border-radius: 12px;
+  overflow: hidden;
+  box-shadow: 0 0 20px rgba(0, 255, 255, 0.2);
+}
+
+.tabla-videojuegos th,
+.tabla-videojuegos td {
+  border: 1px solid #2a2a2a;
+  padding: 12px;
+  text-align: left;
+}
+
+.tabla-videojuegos th {
+  background: linear-gradient(90deg, #7b2ff7, #00c6ff);
+  color: white;
+  font-weight: bold;
+  text-transform: uppercase;
+}
+
+.tabla-videojuegos tr:nth-child(even) {
+  background-color: #1a1a1a;
+}
+
+.tabla-videojuegos tr:hover {
+  background-color: #252525;
+  transition: 0.3s;
+}
+
+progress {
+  width: 150px;
+  height: 18px;
+  accent-color: #00ff88;
+}
+
+/* Tablets */
+@media (max-width: 768px) {
+  .tabla-videojuegos {
+    font-size: 14px;
+  }
+
+  .tabla-videojuegos th,
+  .tabla-videojuegos td {
+    padding: 8px;
+  }
+
+  progress {
+    width: 100px;
+  }
+}
+
+/* Celulares */
+@media (max-width: 480px) {
+  .tabla-videojuegos {
+    font-size: 12px;
+  }
+
+  .tabla-videojuegos th,
+  .tabla-videojuegos td {
+    padding: 6px;
+    white-space: nowrap;
+  }
+
+  progress {
+    width: 70px;
+    height: 12px;
+  }
+}
