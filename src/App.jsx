@@ -1,5 +1,9 @@
-import { useState } from "react";
-import { BrowserRouter, Routes, Route } from "react-router-dom";
+import { useState, useEffect } from "react";
+import {
+  BrowserRouter,
+  Routes,
+  Route,
+} from "react-router-dom";
 
 import videojuegosIniciales from "./data/videojuegos";
 
@@ -7,11 +11,41 @@ import Navbar from "./components/Navbar";
 import TablaVideojuegos from "./components/TablaVideojuegos";
 import FormularioVideojuego from "./components/FormularioVideojuego";
 import PaginaNoEncontrada from "./components/PaginaNoEncontrada";
+import AlertaNotificacion from "./components/AlertaNotificacion";
 
 function App() {
-  const [videojuegos, setVideojuegos] = useState(
-    videojuegosIniciales
-  );
+  const [videojuegos, setVideojuegos] = useState(() => {
+    const datosGuardados =
+      localStorage.getItem(
+        "lista_videojuegos"
+      );
+
+    return datosGuardados
+      ? JSON.parse(datosGuardados)
+      : videojuegosIniciales;
+  });
+
+  const [mensaje, setMensaje] =
+    useState("");
+
+  const [mostrarAlerta, setMostrarAlerta] =
+    useState(false);
+
+  useEffect(() => {
+    localStorage.setItem(
+      "lista_videojuegos",
+      JSON.stringify(videojuegos)
+    );
+  }, [videojuegos]);
+
+  const mostrarMensaje = (texto) => {
+    setMensaje(texto);
+    setMostrarAlerta(true);
+
+    setTimeout(() => {
+      setMostrarAlerta(false);
+    }, 3000);
+  };
 
   const agregarJuego = (nuevoJuego) => {
     const juego = {
@@ -19,30 +53,53 @@ function App() {
       id: Date.now(),
     };
 
-    setVideojuegos([...videojuegos, juego]);
+    setVideojuegos([
+      ...videojuegos,
+      juego,
+    ]);
+
+    mostrarMensaje(
+      "Videojuego agregado correctamente"
+    );
   };
 
   const eliminarJuego = (id) => {
-    const nuevaLista = videojuegos.filter(
-      (juego) => juego.id !== id
+    setVideojuegos(
+      videojuegos.filter(
+        (juego) => juego.id !== id
+      )
     );
 
-    setVideojuegos(nuevaLista);
+    mostrarMensaje(
+      "Videojuego eliminado correctamente"
+    );
   };
 
-  const editarJuego = (juegoActualizado) => {
-    const nuevaLista = videojuegos.map((juego) =>
-      juego.id === juegoActualizado.id
-        ? juegoActualizado
-        : juego
+  const editarJuego = (
+    juegoActualizado
+  ) => {
+    setVideojuegos(
+      videojuegos.map((juego) =>
+        juego.id === juegoActualizado.id
+          ? juegoActualizado
+          : juego
+      )
     );
 
-    setVideojuegos(nuevaLista);
+    mostrarMensaje(
+      "Videojuego actualizado correctamente"
+    );
   };
 
   return (
     <BrowserRouter>
       <Navbar />
+
+      {mostrarAlerta && (
+        <AlertaNotificacion
+          mensaje={mensaje}
+        />
+      )}
 
       <Routes>
         <Route
@@ -77,7 +134,9 @@ function App() {
 
         <Route
           path="*"
-          element={<PaginaNoEncontrada />}
+          element={
+            <PaginaNoEncontrada />
+          }
         />
       </Routes>
     </BrowserRouter>
